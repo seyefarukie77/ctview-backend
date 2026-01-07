@@ -9,11 +9,11 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: str = "*"
 
     # Database
-    DB_USER: str
-    DB_PASSWORD: str
-    DB_HOST: str
-    DB_PORT: int
-    DB_NAME: str
+    DB_USER:str
+    DB_PASSWORD:str
+    DB_HOST:str
+    DB_PORT:int
+    DB_NAME:str
 
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
@@ -23,7 +23,7 @@ class Settings(BaseSettings):
         )
 
     model_config = {
-        "env_file": ".env",
+        # no env_file in production
         "extra": "ignore"
     }
 
