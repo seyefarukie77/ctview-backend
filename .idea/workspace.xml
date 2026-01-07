@@ -5,69 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="152b80bd-e654-46fa-8ffb-5b810b4ba1ba" name="Changes" comment="Commit">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/CTView10.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/.ebextensions/01_backend.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/Procfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/api/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/api/analytics/overview.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/api/router/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/api/router/analytics.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/api/router/dashboards.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/api/router/metrics.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/core/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/core/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/core/db.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/models/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/models/metrics.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/models/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/models/sentiment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/models/theme.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/models/verbatim.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/models/verbatimsentiment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/models/verbatimtheme.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/schemas/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/schemas/analytics.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/schemas/metrics.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/schemas/schemas.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/schemas/sentiment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/schemas/theme.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/schemas/verbatim.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/services/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/services/analytics.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/services/analytics_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/services/dashboards_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/services/metrics_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/templates/dashboard.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/templates/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/scripts/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/scripts/seed.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/Procfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/analytics/base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/analytics/engagement_dim.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/analytics/engagement_yoy.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/analytics/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/analytics/sentiment.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/analytics/theme.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/analytics/theme_sentiment.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/analytics/verbatim.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,8 +21,20 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/backend" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "seyefarukie77"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/seyefarukie77/ctview-backend.git",
+    "accountId": "9de34640-738c-44bb-8825-b97852f73a28"
+  }
+}]]></component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -118,7 +68,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "ai.playground.ignore.import.keys.banner.in.settings": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "last_opened_file_path": "C:/Users/seyef/PycharmProjects/PythonProject/frontend/analytics",
@@ -305,8 +255,17 @@
       <workItem from="1767748380689" duration="1409000" />
       <workItem from="1767750094676" duration="96000" />
       <workItem from="1767753265200" duration="2980000" />
-      <workItem from="1767756353783" duration="21123000" />
+      <workItem from="1767756353783" duration="27282000" />
     </task>
+    <task id="LOCAL-00001" summary="Commit">
+      <option name="closed" value="true" />
+      <created>1767778859342</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1767778859342</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
