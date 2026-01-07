@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Overview{% endblock %}
+
+{% block content %}
+<h1>ctview overview</h1>
+<p>Choose a dashboard from the navigation.</p>
+
+<div class="row mt-4">
+  <div class="col-md-4">
+    <div class="card text-bg-primary mb-3">
+      <div class="card-header">Total metrics</div>
+      <div class="card-body">
+        <h3 id="total-metrics">—</h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-bg-success mb-3">
+      <div class="card-header">Latest engagement</div>
+      <div class="card-body">
+        <h3 id="latest-engagement">—</h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-bg-secondary mb-3">
+      <div class="card-header">Last updated</div>
+      <div class="card-body">
+        <h3 id="last-updated">—</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="overview-sentiment-plot" style="height:400px;"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function loadOverview() {
+  const res = await fetch('/api/analytics/overview');
+  const data = await res.json();
+
+  document.getElementById('total-metrics').textContent = data.total_metrics ?? '—';
+  document.getElementById('latest-engagement').textContent = data.latest_engagement ?? '—';
+  document.getElementById('last-updated').textContent = data.last_updated ?? '—';
+
+  if (data.sentiment_trend) {
+    const dates = data.sentiment_trend.map(d => d.date);
+    const scores = data.sentiment_trend.map(d => d.score);
+
+    Plotly.newPlot('overview-sentiment-plot', [{
+      x: dates,
+      y: scores,
+      type: 'scatter',
+      mode: 'lines+markers',
+      name: 'Sentiment score'
+    }], { title: 'Sentiment over time' });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadOverview);
+</script>
+{% endblock %}

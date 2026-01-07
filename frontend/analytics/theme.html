@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Theme distribution{% endblock %}
+
+{% block content %}
+<h1>Theme distribution</h1>
+<div id="themes-plot" style="height:400px;"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function loadThemes() {
+  const res = await fetch('/api/analytics/themes');
+  const data = await res.json(); // [{theme, count, percentage}]
+
+  const themes = data.map(d => d.theme);
+  const counts = data.map(d => d.count);
+
+  Plotly.newPlot('themes-plot', [{
+    x: themes,
+    y: counts,
+    type: 'bar',
+    marker: { color: '#0d6efd' }
+  }], {
+    title: 'Theme distribution',
+    xaxis: { tickangle: -45 }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadThemes);
+</script>
+{% endblock %}

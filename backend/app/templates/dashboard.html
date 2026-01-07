@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CTVIEW Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Tailwind CSS CDN (for quick, clean styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-100 text-slate-900">
+
+<!-- Top Navbar -->
+<header class="bg-slate-900 text-white shadow">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-emerald-500 rounded-md flex items-center justify-center font-bold text-slate-900">
+                CT
+            </div>
+            <div>
+                <h1 class="text-xl font-semibold tracking-tight">CTVIEW Dashboard</h1>
+                <p class="text-xs text-slate-300">
+                    Customer feedback · Sentiment · Themes · Verbatim
+                </p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3 text-xs">
+            <span class="hidden sm:inline text-slate-300">
+                Updated: {{ last_updated or "N/A" }}
+            </span>
+            <span class="px-2 py-1 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-400/40">
+                v1.0
+            </span>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+
+    <!-- Filters -->
+    <section class="bg-white rounded-lg shadow-sm p-4 flex flex-wrap gap-4 items-end">
+        <div>
+            <label class="block text-xs font-semibold text-slate-500 mb-1">Date range</label>
+            <div class="flex gap-2">
+                <input type="date" id="start-date"
+                       class="border rounded px-2 py-1 text-sm text-slate-800">
+                <input type="date" id="end-date"
+                       class="border rounded px-2 py-1 text-sm text-slate-800">
+            </div>
+        </div>
+        <div>
+            <label class="block text-xs font-semibold text-slate-500 mb-1">Segment</label>
+            <select id="segment-filter"
+                    class="border rounded px-2 py-1 text-sm text-slate-800 min-w-[140px]">
+                <option value="all">All segments</option>
+                <option value="new">New customers</option>
+                <option value="returning">Returning</option>
+                <option value="enterprise">Enterprise</option>
+            </select>
+        </div>
+        <button id="apply-filters"
+                class="ml-auto bg-slate-900 text-white text-sm px-4 py-2 rounded hover:bg-slate-800">
+            Apply
+        </button>
+    </section>
+
+    <!-- KPI cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- NPS -->
+        <div class="bg-white rounded-lg shadow-sm p-4">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-semibold text-slate-500">NPS</span>
+                <span class="text-xs text-emerald-600">vs last period</span>
+            </div>
+            <div class="flex items-baseline gap-2">
+                <span class="text-2xl font-semibold">
+                    {{ overview.nps if overview else 45 }}
+                </span>
+                <span class="text-xs text-emerald-600">
+                    +{{ overview.nps_delta if overview else 5 }}
+                </span>
+            </div>
+            <p class="mt-1 text-xs text-slate-500">
+                Promoters: {{ overview.promoters if overview else 63 }}%
+            </p>
+        </div>
+
+        <!-- CSAT -->
+        <div class="bg-white rounded-lg shadow-sm p-4">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-semibold text-slate-500">CSAT</span>
+                <span class="text-xs text-emerald-600">/100</span>
+            </div>
+            <div class="flex items-baseline gap-2">
+                <span class="text-2xl font-semibold">
+                    {{ overview.csat if overview else 82 }}
+                </span>
+                <span class="text-xs text-emerald-600">
+                    +{{ overview.csat_delta if overview else 3 }}
+                </span>
+            </div>
+            <p class="mt-1 text-xs text-slate-500">
+                Responses: {{ overview.responses if overview else 1284 }}
+            </p>
+        </div>
+
+        <!-- Volume -->
+        <div class="bg-white rounded-lg shadow-sm p-4">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-semibold text-slate-500">Feedback volume</span>
+                <span class="text-xs text-slate-500">Total</span>
+            </div>
+            <div class="flex items-baseline gap-2">
+                <span class="text-2xl font-semibold">
+                    {{ overview.volume if overview else 1543 }}
+                </span>
+                <span class="text-xs text-emerald-600">
+                    +{{ overview.volume_delta if overview else 12 }}%
+                </span>
+            </div>
+            <p class="mt-1 text-xs text-slate-500">
+                Last 30 days
+            </p>
+        </div>
+
+        <!-- Sentiment -->
+        <div class="bg-white rounded-lg shadow-sm p-4">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-semibold text-slate-500">Overall sentiment</span>
+                <span class="text-xs text-slate-500">Pos / Neu / Neg</span>
+            </div>
+            <div class="text-2xl font-semibold mb-1">
+                {{ sentiment.overall if sentiment else "Positive" }}
+            </div>
+            <p class="text-xs text-slate-500">
+                +{{ sentiment.positive if sentiment else 63 }}% ·
+                {{ sentiment.neutral if sentiment else 22 }}% ·
+                -{{ sentiment.negative if sentiment else 15 }}%
+            </p>
+        </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Trend chart -->
+        <div class="bg-white rounded-lg shadow-sm p-4">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-sm font-semibold text-slate-700">NPS & CSAT over time</h2>
+                <span class="text-xs text-slate-400">Weekly</span>
+            </div>
+            <canvas id="overviewChart" height="120"></canvas>
+        </div>
+
+        <!-- Sentiment breakdown -->
+        <div class="bg-white rounded-lg shadow-sm p-4">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-sm font-semibold text-slate-700">Sentiment by theme</h2>
+                <span class="text-xs text-slate-400">Top 5 themes</span>
+            </div>
+            <canvas id="sentimentChart" height="120"></canvas>
+        </div>
+    </section>
+
+    <!-- Themes + verbatim -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Themes list -->
+        <div class="bg-white rounded-lg shadow-sm p-4">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-sm font-semibold text-slate-700">Top themes</h2>
+            </div>
+            <ul class="divide-y divide-slate-100">
+                {% for theme in themes or [
+                    {"name": "Response time", "share": 32, "sentiment": "Negative"},
+                    {"name": "Agent quality", "share": 24, "sentiment": "Positive"},
+                    {"name": "Product usability", "share": 18, "sentiment": "Mixed"},
+                ] %}
+                    <li class="py-2 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-800">
+                                {{ theme.name }}
+                            </p>
+                            <p class="text-xs text-slate-500">
+                                {{ theme.sentiment }} · {{ theme.share }}% of feedback
+                            </p>
+                        </div>
+                        <div class="text-xs px-2 py-1 rounded-full
+                            {% if theme.sentiment == 'Positive' %}
+                                bg-emerald-50 text-emerald-700
+                            {% elif theme.sentiment == 'Negative' %}
+                                bg-rose-50 text-rose-700
+                            {% else %}
+                                bg-amber-50 text-amber-700
+                            {% endif %}">
+                            {{ theme.sentiment }}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Verbatim table -->
+        <div class="bg-white rounded-lg shadow-sm p-4">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-sm font-semibold text-slate-700">Recent verbatim</h2>
+                <span class="text-xs text-slate-400">Last 10 comments</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-xs">
+                    <thead class="bg-slate-50">
+                    <tr>
+                        <th class="text-left px-2 py-2 text-slate-500 font-semibold">Date</th>
+                        <th class="text-left px-2 py-2 text-slate-500 font-semibold">Sentiment</th>
+                        <th class="text-left px-2 py-2 text-slate-500 font-semibold">Comment</th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                    {% for item in verbatim or [
+                        {"date": "2026-01-05", "sentiment": "Negative", "text": "Wait times are too long."},
+                        {"date": "2026-01-04", "sentiment": "Positive", "text": "Agent was very helpful and kind."},
+                        {"date": "2026-01-03", "sentiment": "Mixed", "text": "Product works well but setup was confusing."},
+                    ] %}
+                        <tr>
+                            <td class="px-2 py-2 text-slate-600">
+                                {{ item.date }}
+                            </td>
+                            <td class="px-2 py-2">
+                                <span class="px-2 py-1 rounded-full text-[10px]
+                                    {% if item.sentiment == 'Positive' %}
+                                        bg-emerald-50 text-emerald-700
+                                    {% elif item.sentiment == 'Negative' %}
+                                        bg-rose-50 text-rose-700
+                                    {% else %}
+                                        bg-amber-50 text-amber-700
+                                    {% endif %}">
+                                    {{ item.sentiment }}
+                                </span>
+                            </td>
+                            <td class="px-2 py-2 text-slate-800">
+                                {{ item.text }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- Charts JS -->
+<script>
+    // Dummy data for now – you can inject from FastAPI later using Jinja
+    const overviewLabels = {{ overview_chart.labels | tojson if overview_chart else '["Week 1","Week 2","Week 3","Week 4"]' }};
+    const overviewNps = {{ overview_chart.nps | tojson if overview_chart else '[40, 45, 47, 50]' }};
+    const overviewCsat = {{ overview_chart.csat | tojson if overview_chart else '[80, 81, 83, 85]' }};
+
+    const overviewCtx = document.getElementById('overviewChart').getContext('2d');
+    new Chart(overviewCtx, {
+        type: 'line',
+        data: {
+            labels: overviewLabels,
+            datasets: [
+                {
+                    label: 'NPS',
+                    data: JSON.parse(overviewNps),
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16,185,129,0.1)',
+                    tension: 0.3
+                },
+                {
+                    label: 'CSAT',
+                    data: JSON.parse(overviewCsat),
+                    borderColor: '#0f172a',
+                    backgroundColor: 'rgba(15,23,42,0.1)',
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            plugins: { legend: { labels: { boxWidth: 10 } } },
+            scales: {
+                y: { beginAtZero: true, ticks: { stepSize: 10 } }
+            }
+        }
+    });
+
+    const sentimentLabels = {{ sentiment_chart.labels | tojson if sentiment_chart else '["Response time","Agent quality","Usability","Pricing","Onboarding"]' }};
+    const sentimentPositive = {{ sentiment_chart.positive | tojson if sentiment_chart else '[40, 65, 55, 30, 50]' }};
+    const sentimentNegative = {{ sentiment_chart.negative | tojson if sentiment_chart else '[35, 10, 15, 45, 20]' }};
+
+    const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
+    new Chart(sentimentCtx, {
+        type: 'bar',
+        data: {
+            labels: sentimentLabels,
+            datasets: [
+                {
+                    label: 'Positive',
+                    data: JSON.parse(sentimentPositive),
+                    backgroundColor: 'rgba(16,185,129,0.8)'
+                },
+                {
+                    label: 'Negative',
+                    data: JSON.parse(sentimentNegative),
+                    backgroundColor: 'rgba(248,113,113,0.8)'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { labels: { boxWidth: 10 } } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+
+    // Filters – wire these to your backend later
+    document.getElementById('apply-filters').addEventListener('click', () => {
+        const start = document.getElementById('start-date').value;
+        const end = document.getElementById('end-date').value;
+        const segment = document.getElementById('segment-filter').value;
+        console.log('Apply filters', { start, end, segment });
+        // TODO: call your analytics endpoints and refresh data
+    });
+</script>
+
+</body>
+</html>

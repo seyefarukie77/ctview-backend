@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Theme × Sentiment{% endblock %}
+
+{% block content %}
+<h1>Theme × Sentiment</h1>
+<div id="theme-sentiment-plot" style="height:450px;"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function loadThemeSentiment() {
+  const res = await fetch('/api/analytics/theme-sentiment');
+  const data = await res.json(); // [{theme, positive, neutral, negative}]
+
+  const themes = data.map(d => d.theme);
+  const sentiments = ['Positive', 'Neutral', 'Negative'];
+
+  const z = [
+    data.map(d => d.positive),
+    data.map(d => d.neutral),
+    data.map(d => d.negative),
+  ];
+
+  Plotly.newPlot('theme-sentiment-plot', [{
+    z: z,
+    x: themes,
+    y: sentiments,
+    type: 'heatmap',
+    colorscale: 'RdYlGn'
+  }], {
+    title: 'Theme × Sentiment heatmap'
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadThemeSentiment);
+</script>
+{% endblock %}

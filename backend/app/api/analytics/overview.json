@@ -1,0 +1,9 @@
+{
+  "total_metrics": 123,
+  "latest_engagement": 0.78,
+  "last_updated": "2026-01-07",
+  "sentiment_trend": [
+    { "date": "2026-01-01", "score": 0.2 },
+    ...
+  ]
+}

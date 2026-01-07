@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Sentiment distribution{% endblock %}
+
+{% block content %}
+<h1>Sentiment distribution</h1>
+<div id="sentiment-plot" style="height:400px;"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function loadSentiment() {
+  const res = await fetch('/api/analytics/sentiment');
+  const data = await res.json(); // [{date, positive, neutral, negative}]
+
+  const dates = data.map(d => d.date);
+
+  const traces = [
+    {
+      x: dates,
+      y: data.map(d => d.positive),
+      name: 'Positive',
+      type: 'bar',
+      marker: { color: 'green' }
+    },
+    {
+      x: dates,
+      y: data.map(d => d.neutral),
+      name: 'Neutral',
+      type: 'bar',
+      marker: { color: 'gray' }
+    },
+    {
+      x: dates,
+      y: data.map(d => d.negative),
+      name: 'Negative',
+      type: 'bar',
+      marker: { color: 'red' }
+    }
+  ];
+
+  Plotly.newPlot('sentiment-plot', traces, {
+    barmode: 'stack',
+    title: 'Sentiment distribution over time'
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadSentiment);
+</script>
+{% endblock %}

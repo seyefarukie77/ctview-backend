@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Engagement by dimension{% endblock %}
+
+{% block content %}
+<h1>Engagement by dimension</h1>
+<div id="engagement-dim-plot" style="height:400px;"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function loadEngagementDim() {
+  const params = new URLSearchParams({ name: 'engagement' });
+  const res = await fetch('/api/analytics/engagement-dim?' + params.toString());
+  const data = await res.json(); // [{dimension, score}]
+
+  const dims = data.map(d => d.dimension);
+  const scores = data.map(d => d.score);
+
+  Plotly.newPlot('engagement-dim-plot', [{
+    x: dims,
+    y: scores,
+    type: 'bar',
+    marker: { color: '#6610f2' }
+  }], {
+    title: 'Engagement by dimension',
+    xaxis: { tickangle: -45 },
+    yaxis: { range: [0, 1] }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadEngagementDim);
+</script>
+{% endblock %}

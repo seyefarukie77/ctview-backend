@@ -1,0 +1,34 @@
+# engagement yoy
+
+{% extends "base.html" %}
+{% block title %}Engagement YoY{% endblock %}
+
+{% block content %}
+<h1>Engagement YoY</h1>
+
+<div id="engagement-yoy-plot"></div>
+
+<script>
+  const graphJSON = {{ graph_json | safe }};
+  Plotly.newPlot('engagement-yoy-plot', graphJSON.data, graphJSON.layout);
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function loadEngagementYoY() {
+  const params = new URLSearchParams({
+    name: 'engagement'
+  });
+
+  const res = await fetch('/api/analytics/engagement-yoy?' + params.toString());
+  const data = await res.json();
+
+  console.log(data);
+  // TODO: render YoY chart here
+}
+
+document.addEventListener('DOMContentLoaded', loadEngagementYoY);
+</script>
+{% endblock %}
+
