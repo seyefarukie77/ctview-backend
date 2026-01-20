@@ -1,16 +1,26 @@
-# This is a sample Python script.
+# ctview-backend/main.py
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 
+from app.api.router import analytics
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+app = FastAPI(title="CTVIEW Dashboard")
+templates = Jinja2Templates(directory="app/templates")
 
+app.include_router(analytics.router)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+@app.get("/", response_class=HTMLResponse)
+async def ctview_dashboard(request: Request):
+    context = {
+        "request": request,
+        "last_updated": "2026-01-07 09:00",
+        "overview": None,
+        "sentiment": None,
+        "themes": None,
+        "verbatim": None,
+        "overview_chart": None,
+        "sentiment_chart": None,
+    }
+    return templates.TemplateResponse("dashboard.html", context)
